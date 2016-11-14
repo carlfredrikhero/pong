@@ -29,7 +29,8 @@ let ball = {
   'h': 4,
   'color': 'white',
   'x_dir': 2,
-  'y_dir': .6
+  'y_dir': .6,
+  'velocity': 1
 }
 
 let racket = [{
@@ -54,6 +55,7 @@ function update (){
 
   ctx.fillStyle = 'white'
   ctx.font='12px monospace';
+  ctx.textAlign = 'left'
   ctx.fillText(('00' + score[0]).substr(-3),10,20);
   ctx.textAlign = 'right'
   ctx.fillText(('00' + score[1]).substr(-3),c.width-10,20);
@@ -78,7 +80,7 @@ function moveBall(){
   if (
     ball.y <= 0 ||
     ball.y >= c.height - ball.h){
-    ball.y_dir *= -1;
+    ball.y_dir *= -ball.velocity;
   }
 
   ball.y += ball.y_dir;
@@ -88,23 +90,23 @@ function moveBall(){
       score[1]++
       ball.x = c.width/2
       ball.y = c.height/2
+      ball.velocity = 1
+      ball.x_dir = randomDir()
+      ball.y_dir = randomDir()
     break;
     case (ball.x >= c.width - ball.w): // ball hits the right wall
       score[0]++
       ball.x = c.width/2
       ball.y = c.height/2
+      ball.velocity = 1
+      ball.x_dir = randomDir()
+      ball.y_dir = randomDir()
+    break;
+    case ((ball.x <= racket[0].x+racket[0].w && ball.y >= racket[0].y && ball.y <= (racket[0].y+racket[0].h)) ||  // ball hits racket[0]
+    (ball.x >= racket[1].x-racket[1].w && ball.y >= racket[1].y && ball.y <= (racket[1].y+racket[1].h))): // ball hits racket[1]
+      ball.x_dir *= -ball.velocity;
     break;
 
-  }
-
-  // set x
-  if (
-    ball.x <= 0 || // ball is behind racket
-    ball.x >= c.width - ball.w || // ball hits the right wall
-    (ball.x <= racket[0].x+racket[0].w && ball.y >= racket[0].y && ball.y <= (racket[0].y+racket[0].h)) ||  // ball hits racket[0]
-    (ball.x >= racket[1].x-racket[1].w && ball.y >= racket[1].y && ball.y <= (racket[1].y+racket[1].h)) // ball hits racket[1]
-  ){
-    ball.x_dir *= -1;
   }
 
   ball.x += ball.x_dir;
@@ -132,8 +134,10 @@ function doesBallTouchRacket(){}
 function isBallBehindRacket(){}
 
 function start(){
-  running = true
-  step()
+  if (!running){
+    running = true
+    step()
+  }
 }
 
 function step(){
@@ -145,6 +149,12 @@ function pause(){
     cancelAnimationFrame(timerId)
     running = false
   }
+}
+
+function randomDir(min, max) {
+  min = min || 0.1
+  max = max || 3
+  return Math.random() * (max - min) + min;
 }
 
 step()
