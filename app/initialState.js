@@ -8,7 +8,8 @@ export default {
     'h': 4,
     'color': 'white',
     'x_dir': 1,
-    'y_dir': 1
+    'y_dir': 1,
+    'speed': 1
   },
   players: [
     {
@@ -20,8 +21,6 @@ export default {
         'h': 60,
         'color': 'white',
         'velocity': 2,
-        'up': 'q',
-        'down': 'a'
       }
     }, {
       score: 0,
@@ -32,8 +31,6 @@ export default {
         'h': 60,
         'color': 'white',
         'velocity': 2,
-        'up': 'i',
-        'down': 'k'
       }
     }
   ]

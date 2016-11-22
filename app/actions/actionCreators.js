@@ -26,10 +26,25 @@ export const moveBall = () => {
   return { type: 'MOVE_BALL' }
 }
 
-export const keyDown = (key) => {
-  return { type: 'KEY_DOWN', key: key }
+export const bounceBallOffRoofOrFloor = () => {
+  return { type: 'BOUNCE_BALL_OFF_ROOF_OR_FLOOR'}
 }
 
-export const keyUp = (key) => {
-  return { type: 'KEY_UP', key: key }
+export const bounceBallOffRacket = (index) => {
+  return {
+    type: 'BOUNCE_BALL_OFF_RACKET',
+    i: index
+  }
+}
+
+/**
+ * player index
+ * direction = -1 up, 1 = down
+ */
+export const moveRacket = (index, direction) => {
+  return {
+    type: 'MOVE_RACKET',
+    i: index,
+    direction
+  }
 }
