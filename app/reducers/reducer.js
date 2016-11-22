@@ -8,17 +8,15 @@ export default (initialState) => (state = initialState, action) => {
       return Object.assign({}, state, {
         running: false
       })
-    case 'KEY_DOWN':
-    case 'KEY_UP':
-      return Object.assign({}, state, {
-        keys: keys(state.keys, action)
-      })
     case 'POSITION_BALL':
     case 'MOVE_BALL':
+    case 'BOUNCE_BALL_OFF_ROOF_OR_FLOOR':
+    case 'BOUNCE_BALL_OFF_RACKET':
       return Object.assign({}, state, {
         ball: ball(state.ball, action)
       })
     case 'POSITION_RACKET':
+    case 'MOVE_RACKET':
       return Object.assign({}, state, {
         players: state.players.map((player, index) => {
           if (action.i !== index) {
@@ -58,6 +56,14 @@ const ball = (state, action) => {
         x: state.x + state.x_dir,
         y: state.y + state.y_dir
       })
+    case 'BOUNCE_BALL_OFF_ROOF_OR_FLOOR':
+      return Object.assign({}, state, {
+        y_dir: state.y_dir *= -1
+      })
+    case 'BOUNCE_BALL_OFF_RACKET':
+      return Object.assign({}, state, {
+        x_dir: state.x_dir *= -1
+      })
     default:
       return state
   }
@@ -70,20 +76,10 @@ const racket = (state, action) => {
         x: action.x,
         y: action.y
       })
-    default:
-      return state
-  }
-}
-
-const keys = (state, action) => {
-  let new_obj = {}
-  switch (action.type){
-    case 'KEY_DOWN':
-      new_obj[action.key] = true
-      return Object.assign({}, state, new_obj)
-    case 'KEY_UP':
-      new_obj[action.key] = false
-      return Object.assign({}, state, new_obj)
+    case 'MOVE_RACKET':
+      return Object.assign({}, state, {
+        y: state.y + (action.direction * state.velocity )
+      })
     default:
       return state
   }

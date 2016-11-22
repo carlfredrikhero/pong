@@ -18,45 +18,8 @@
 
 ## Version 2 with Redux
 
-### Actions
-const INCREASE_SCORE
-const MOVE_RACKET i, upOrDown
-const MOVE_BALL, x, y
-const BOUNCE_BALL
-const START
-const STOP
-const INCREASE_SPEED
-const RESET
+# TODO
 
-### Functions
-
-setup()
-tick()
-start()
-stop()
-step()
-
-draw_game_canvas(ctx)
-draw_score(ctx, i, score)
-draw_racket(ctx, racket)
-draw_ball(ctx, x, y)
-
-isBallTouchingRacket()
-isBallTouchingWall()
-isBallTouchingRoof()
-isBallTouchingFloor()
-
-### Init Store object
-
-```
-{
-  running: true,
-  players: [{
-    score: 0,
-    racket: {}
-  }, {
-    score: 0,
-    racket: {}
-  }]
-}
-```
+ - [ ] Add pending status where the text "Get ready... {countdown from 3}" and the ball is blinking
+ - [ ] When ball bounces off the racket, change y_dir depending on where the ball hits the racket
+       Closer to the middle => less y dir, closer to the edge => more y dir
