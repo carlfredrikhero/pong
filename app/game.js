@@ -1,4 +1,4 @@
-export const Game = (canvas, screen, input, store, actions, ball) => {
+export const Game = (canvas, screen, input, store, actions, ball, racket) => {
   let state = store.getState()
   let running = state.running
   let timerId
@@ -16,13 +16,18 @@ export const Game = (canvas, screen, input, store, actions, ball) => {
 
       // TODO racket 0 cannot be off screen
       let racket0_dir = input.moveRacket(0);
-      if (racket0_dir !== 0){
+      if (racket0_dir !== 0 &&
+          !racket.touchesRoof(canvas, state.players[0].racket, racket0_dir) &&
+          !racket.touchesFloor(canvas, state.players[0].racket, racket0_dir)
+      ){
         store.dispatch(actions.moveRacket(0, racket0_dir))
       }
 
       // TODO racket 0 cannot be off screen
       let racket1_dir = input.moveRacket(1);
-      if (racket1_dir !== 0){
+      if (racket1_dir !== 0 &&
+          !racket.touchesRoof(canvas, state.players[1].racket, racket1_dir) &&
+          !racket.touchesFloor(canvas, state.players[1].racket, racket1_dir)){
         store.dispatch(actions.moveRacket(1, racket1_dir))
       }
 
@@ -33,23 +38,26 @@ export const Game = (canvas, screen, input, store, actions, ball) => {
         store.dispatch(actions.bounceBallOffRoofOrFloor())
       }
 
-      let racket_index
-      if (-1 !== (racket_index = ball.touchesRacket(state))){
-        store.dispatch(actions.bounceBallOffRacket())
+      // does ball touch racket
+      let racket_action = ball.touchesRacket(state)
+      if (false !== racket_action){
+        store.dispatch(actions.bounceBallOffRacket(racket_action.y_dir))
       }
 
-      // TODO
       // does thr ball touch any wall
       // i.e. points to anyone?
       if (ball.touchesLeftWall(canvas, state.ball)) {
         // add score to player 1
+        store.dispatch(actions.addScore(1))
         // reset ball and start the game again
+        reset()
       }
 
-      // TODO
       if (ball.touchesRightWall(canvas, state.ball)) {
         // add score to player 0
+        store.dispatch(actions.addScore(0))
         // reset ball and start the game again
+        reset()
       }
     }
 
@@ -68,6 +76,14 @@ export const Game = (canvas, screen, input, store, actions, ball) => {
 
   const stop = () => {
     cancelAnimationFrame(timerId)
+  }
+
+  const reset = () => {
+    store.dispatch(actions.stop())
+    store.dispatch(actions.positionBall(canvas.width/2, canvas.height/2))
+    setTimeout(() => {
+      store.dispatch(actions.start())
+    }, 3000)
   }
 
   store.subscribe(() => {
@@ -91,7 +107,9 @@ export const Game = (canvas, screen, input, store, actions, ball) => {
     }
   })
 
+
   // update store with default settings
+  store.dispatch(actions.setCanvas(canvas.width, canvas.height));
   // place ball in the middle
   // TODO add a screen.getCenter
   store.dispatch(actions.positionBall(canvas.width/2, canvas.height/2))
@@ -102,7 +120,7 @@ export const Game = (canvas, screen, input, store, actions, ball) => {
   // TODO add a screen.getRightPosition?
   store.dispatch(actions.positionRacket(1, canvas.width-10-4, canvas.height/2))
 
-  return { tick }
+  return { tick, stop }
 }
 
 

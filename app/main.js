@@ -5,6 +5,7 @@ import { Game } from './game'
 import Screen from './screen'
 import { Input } from './input'
 import * as ball from './ball'
+import * as racket from './racket'
 import * as actions from './actions/actionCreators'
 
 let store = createStore(createReducer(initialState),window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
@@ -12,6 +13,11 @@ let store = createStore(createReducer(initialState),window.__REDUX_DEVTOOLS_EXTE
 let screen = Screen(document.getElementById('gc'))
 let input = Input()
 
-let game = Game(document.getElementById('gc'), screen, input, store, actions, ball)
+let game = Game(document.getElementById('gc'), screen, input, store, actions, ball, racket)
 
 game.tick()
+
+window.onerror = function(messageOrEvent, source, lineno, colno, error){
+  game.stop()
+  console.log('Game stopped due to an unexpected exception.');
+}

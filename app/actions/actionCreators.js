@@ -1,17 +1,25 @@
+export const setCanvas = (w, h) => {
+  return {
+    type: 'SET_CANVAS',
+    w,
+    h
+  }
+}
+
 export const positionBall = (x, y) => {
   return {
     type: 'POSITION_BALL',
-    x: x,
-    y: y
+    x,
+    y
   }
 }
 
 export const positionRacket = (i, x, y) => {
   return {
     type: 'POSITION_RACKET',
-    i: i,
-    x: x,
-    y: y
+    i,
+    x,
+    y
   }
 }
 
@@ -30,10 +38,10 @@ export const bounceBallOffRoofOrFloor = () => {
   return { type: 'BOUNCE_BALL_OFF_ROOF_OR_FLOOR'}
 }
 
-export const bounceBallOffRacket = (index) => {
+export const bounceBallOffRacket = (y_dir) => {
   return {
     type: 'BOUNCE_BALL_OFF_RACKET',
-    i: index
+    y_dir
   }
 }
 
@@ -41,10 +49,17 @@ export const bounceBallOffRacket = (index) => {
  * player index
  * direction = -1 up, 1 = down
  */
-export const moveRacket = (index, direction) => {
+export const moveRacket = (i, direction) => {
   return {
     type: 'MOVE_RACKET',
-    i: index,
+    i,
     direction
+  }
+}
+
+export const addScore = (i) => {
+  return {
+    type: 'ADD_SCORE',
+    i
   }
 }

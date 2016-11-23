@@ -7,11 +7,11 @@ export const touchesFloor = (canvas, ball) => {
 }
 
 export const touchesLeftWall = (canvas, ball) => {
-  return ball.x <= 0
+  return ball.x <= 0 && ball.x_dir < 0
 }
 
 export const touchesRightWall = (canvas, ball) => {
-  return ball.x + ball.h >= canvas.width
+  return ball.x >= canvas.width - ball.h && ball.x_dir > 0
 }
 
 /**
@@ -26,7 +26,12 @@ export const touchesRacket = (state) => {
   if (ball.x_dir < 0 &&
       ball.x <= r0.x+r0.w &&
       ball.y >= r0.y &&
-      ball.y <= (r0.y+r0.h)) return 0
+      ball.y <= (r0.y+r0.h)){
+        return {
+          i: 0,
+          y_dir: (ball.y-r0.y)/((r0.h-ball.h)/2/4)-4
+        }
+  }
 
   // touches right racket?
   let r1 = state.players[1].racket
@@ -34,7 +39,12 @@ export const touchesRacket = (state) => {
     ball.x_dir > 0 &&
     ball.x >= r1.x-r1.w &&
     ball.y >= r1.y &&
-    ball.y <= (r1.y+r1.h)) return 1
+    ball.y <= (r1.y+r1.h)) {
+      return {
+        i: 1,
+        y_dir: (ball.y-r1.y)/((r1.h-ball.h)/2/4)-4
+      }
+  }
 
-  return -1
+  return false
 }

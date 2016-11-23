@@ -5,7 +5,7 @@ export default Screen = (el) => {
     ctx.fillStyle = 'black'
     ctx.fillRect(0,0, el.width, el.width)
     // draw_scores
-    state.players.forEach(drawScore)
+    state.score.forEach(drawScore)
     //draw_ball
     let ball = state.ball
     ctx.fillStyle = ball.color
@@ -14,14 +14,14 @@ export default Screen = (el) => {
     state.players.forEach(drawRacket)
   }
 
-  const drawScore = (player, i) => {
+  const drawScore = (score, i) => {
     ctx.fillStyle = 'white'
     ctx.font='12px monospace';
     ctx.textAlign = (i) ? 'right' : 'left'
 
     let x = (i) ? el.width-10 : 10
 
-    ctx.fillText(('00' + player.score).substr(-3), x, 20);
+    ctx.fillText(('00' + score).substr(-3), x, 20);
   }
 
   const drawRacket = (player) => {
